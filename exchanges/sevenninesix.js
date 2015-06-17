@@ -1,27 +1,27 @@
-var Bitstamp = require("bitstamp");
-var util = require('../core/util.js');
-var _ = require('lodash');
-var moment = require('moment');
-var log = require('../core/log');
+var SevenNineSix = require("sevenninesix");
+var util = require("../core/util.js");
+var _ = require("lodash");
+var moment = require("moment");
+var log = require("../core/log");
 
 var Trader = function(config) {
-  _.bindAll(this);
+ _.bindAll(this);
   if(_.isObject(config)) {
     this.key = config.key;
     this.secret = config.secret;
-    this.clientID = config.username;
   }
-  this.name = 'Bitstamp';
+  this.name = '796';
   this.balance;
   this.price;
 
-  this.bitstamp = new Bitstamp(this.key, this.secret, this.clientID);
+  this.sevenninesix = new SevenNineSix(this.key, this.secret);
 }
 
 // if the exchange errors we try the same call again after
 // waiting 10 seconds
 Trader.prototype.retry = function(method, args) {
   var wait = +moment.duration(10, 'seconds');
+  
   log.debug(this.name, 'returned an error, retrying..');
 
   var self = this;
@@ -52,11 +52,11 @@ Trader.prototype.getPortfolio = function(callback) {
     });
     callback(err, portfolio);
   }
-  this.bitstamp.balance(_.bind(set, this));
+  this.okcoin.balance(_.bind(set, this));
 }
 
 Trader.prototype.getTicker = function(callback) {
-  this.bitstamp.ticker(callback);
+  this.okcoin.ticker(callback);
 }
 
 Trader.prototype.getFee = function(callback) {
@@ -66,7 +66,7 @@ Trader.prototype.getFee = function(callback) {
 
     callback(false, data.fee / 100);
   }
-  this.bitstamp.balance(_.bind(set, this));
+  this.okcoin.balance(_.bind(set, this));
 }
 
 Trader.prototype.buy = function(amount, price, callback) {
@@ -78,12 +78,12 @@ Trader.prototype.buy = function(amount, price, callback) {
   };
 
   // TODO: fees are hardcoded here?
-  amount *= 0.995; // remove fees
+  amount *= 1; // remove fees
   // prevent: Ensure that there are no more than 8 digits in total.
   amount *= 100000000;
   amount = Math.floor(amount);
   amount /= 100000000;
-  this.bitstamp.buy(amount, price, _.bind(set, this));
+  this.okcoin.buy(amount, price, _.bind(set, this));
 }
 
 Trader.prototype.sell = function(amount, price, callback) {
@@ -94,7 +94,7 @@ Trader.prototype.sell = function(amount, price, callback) {
     callback(null, result.id);
   };
 
-  this.bitstamp.sell(amount, price, _.bind(set, this));
+  this.okcoin.sell(amount, price, _.bind(set, this));
 }
 
 Trader.prototype.checkOrder = function(order, callback) {
@@ -103,7 +103,7 @@ Trader.prototype.checkOrder = function(order, callback) {
     callback(err, !stillThere);
   };
 
-  this.bitstamp.open_orders(_.bind(check, this));
+  this.okcoin.open_orders(_.bind(check, this));
 }
 
 Trader.prototype.cancelOrder = function(order, callback) {
@@ -112,19 +112,23 @@ Trader.prototype.cancelOrder = function(order, callback) {
       log.error('unable to cancel order', order, '(', err, result, ')');
   };
 
-  this.bitstamp.cancel_order(order, _.bind(cancel, this));
+  this.okcoin.cancel_order(order, _.bind(cancel, this));
 }
 
 Trader.prototype.getTrades = function(since, callback, descending) {
   var args = _.toArray(arguments);
-  var process = function(err, result) {    
-    if(err)
-      return this.retry(this.getTrades, args);
+  var process = function(err, result) {
+  
+    if(err) {
+        console.log("796.com: " + err);
+        return this.retry(this.getTrades, args);
 
+    }  
+        
     callback(null, result.reverse());
   };
 
-  this.bitstamp.transactions(_.bind(process, this));
+  this.sevenninesix.getTrades(_.bind(process, this));
 }
 
 

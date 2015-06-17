@@ -568,7 +568,6 @@ Manager.prototype.getCandles = function(mom, from, to, cb) {
 // grab a batch of trades and for each full minute
 // create a new candle
 Manager.prototype.processTrades = function(data) {
-
   this.setFetchMeta(data);
 
   if(this.fetch.start.day > this.current.day)
@@ -585,7 +584,7 @@ Manager.prototype.processTrades = function(data) {
     return;
   }
   var trades = this.filterTrades(data.all);
-
+  
   if(!_.size(trades)) {
     log.debug('done with this batch (1)');
     return this.emit('processed');
@@ -667,6 +666,7 @@ Manager.prototype.filterTrades = function(trades) {
 // turn a batch of trades into 1m candles. Is sorted as
 // long as the batch of trades are.
 Manager.prototype.calculateCandles = function(trades) {
+    
   var candles = [];
   var minutes = [];
 
@@ -685,6 +685,10 @@ Manager.prototype.calculateCandles = function(trades) {
   var f = parseFloat;
 
   _.each(trades, function(trade) {
+
+    // var util = require('util');
+    // console.log("Trade:: " + util.inspect(trade)); // DEBUG
+    
     var mom = moment.unix(trade.date).utc();
     var min = this.momentToMinute(mom);
 
@@ -760,6 +764,21 @@ Manager.prototype.splitCandleDays = function(candles) {
 // would return an array of candles from:
 //     [midnight up to][batch without gaps][up to next midnight - 1]
 Manager.prototype.addEmtpyCandles = function(candles, start, end) {
+    // DEBUG /////////////////////////////////////////////////
+    
+    // var fs = require('fs');
+    // var util = require('util');
+    
+    // fs.writeFile("/temp/okcoin.txt", "Candles: " + util.inspect(candles) + " s: " + start + "e: " + end, function(err) {
+    // if(err) {
+        // return console.log(err);
+    // }
+
+    // console.log("The debug/log file was saved!");
+    // });
+    
+    // END OF DEBUG /////////////////////////////////////////
+
   var length = _.size(candles);
   if(!length)
     return candles;
@@ -773,9 +792,13 @@ Manager.prototype.addEmtpyCandles = function(candles, start, end) {
   var last = length - 1;
   var emptyCandles = [];
 
+  
   // for each candle iterate and if the next one does
   // not exist, create it
   _.each(candles, function(c, i) {
+    var util = require('util');                     // DEBUG
+    // console.log("Candle:: Min " + (c.s) + " Max:" + max);     // DEBUG
+    
     // if this was last and we don't
     // have to fill a gap after this batch
     // we're done
@@ -793,6 +816,8 @@ Manager.prototype.addEmtpyCandles = function(candles, start, end) {
 
     if(min > max) {
       console.log('c', candles, 's', start, 'e', end);
+      console.log('Min:', min, 'Max:', max);
+            
       throw 'Weird error 2';
     }
 

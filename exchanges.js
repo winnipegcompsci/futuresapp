@@ -170,6 +170,38 @@ var exchanges = [
     fetchTimespan: 60
   },
   {
+    name: 'OKCoin',
+    slug: 'okcoin',
+    direct: false,
+    infinityOrder: false,
+    currencies: ['USD'],
+    assets: ['BTC'],
+    markets: [
+      {
+        pair: ['USD', 'BTC'], minimalOrder: { amount: 0.1, unit: 'asset' }
+      }
+    ],
+    requires: ['key', 'secret', 'username'],
+    providesHistory: false,
+    fetchTimespan: 60
+  },
+  {
+    name: '796',
+    slug: 'sevenninesix',
+    direct: false,
+    infinityOrder: false,
+    currencies: ['USD'],
+    assets: ['BTC'],
+    markets: [
+      {
+        pair: ['USD', 'BTC'], minimalOrder: { amount: 0.1, unit: 'asset' }
+      }
+    ],
+    requires: ['key', 'secret', 'username'],
+    providesHistory: false,
+    fetchTimespan: 60
+  },
+  {
     name: 'CEX.io',
     slug: 'cexio',
     direct: false,
