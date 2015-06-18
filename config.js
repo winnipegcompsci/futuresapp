@@ -192,7 +192,7 @@ config.mandrillMailer = {
 config.smsPlivo = {
   enabled: false,
   sendMailOnStart: true,
-  smsPrefix: 'GEKKO:', // always start SMS message with this
+  smsPrefix: 'FUTURES APP:', // always start SMS message with this
   to: '', // your SMS number
   from: '', // SMS number to send from provided by Plivo
   authId: '', // your Plivo auth ID
