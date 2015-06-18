@@ -1,13 +1,25 @@
-<?php
-use Cake\Network\Http\Client;
-
-?>
-
 <div class="panel panel-blue">
-    <div class="panel-heading dark-overlay">OKCoin.com</div>
+    <div class="panel-heading dark-overlay">OKCoin.com Today</div>
     <div class="panel-body">
-        <h4> <div id="okcoin_current_price"> ###.## </div> <small> USD/BTC </small> </h4>
-        <h4><small>Balance </small> <div id="okcoin_current_balance"> ##.###### </div> <small> BTC </small></h4>
-        <h4><small>Holding </small> <div id="okcoin_current_positions"> X </div> <small> Positions </small></h4>
+    
+        <!-- LHS -->
+        <div class="col-lg-4">
+            <div class="row"> 
+                <h4><small> Min. </small> <?= number_format($data['min'], 2) ?> USD</h4>
+            </div>
+            
+            <div class="row"> 
+                <h4><small> Max. </small> <?= number_format($data['max'], 2) ?> USD</h4>
+            </div>
+            
+        </div>
+        
+        <!-- RHS -->
+        <div class="col-lg-8">
+            <div class="row pull-right">
+                <h2><small>VWAP: $<?= number_format($data['vwap'], 2) ?> USD</small> </h2>
+                <h2>Current: $<?= number_format($data['current'], 2) ?> USD</h2>
+            </div>
+        </div>
     </div>
 </div>

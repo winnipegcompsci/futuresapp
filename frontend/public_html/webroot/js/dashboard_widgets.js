@@ -11,22 +11,17 @@ window.setInterval(function(){
 function updateOKCoinCurrentPrice () {   
     var url = 'http://www.okcoin.com/api/v1/ticker.do';
  
-    $.ajax({
-       type: 'GET',
-        url: url,
-        async: false,
-        jsonpCallback: 'jsonCallback',
-        contentType: "application/json",
-        dataType: 'jsonp',
-        success: function(json) {
-           console.dir(json.ticker);
-        },
-        error: function(e) {
-           console.log(e.message);
-        }
+ 
+    $.getJSON("http://www.okcoin.com/api/v1/ticker.do?callback=?", function(result){
+        //response data are now in the result variable
+        setText($("#okcoin_current_price"), result.ticker);
     });
     
 }
 
+
+function setText(elem, text) {
+    console.log("Setting " + elem.id + " text to " + text);
+}
 
 

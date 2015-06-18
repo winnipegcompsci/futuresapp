@@ -14,6 +14,7 @@
     <?= $this->Html->css('bootstrap.min.css'); ?>
     <?= $this->Html->css('datepicker3.css'); ?>
     <?= $this->Html->css('styles.css'); ?>
+    <?= $this->Html->css('//cdn.datatables.net/1.10.7/css/jquery.dataTables.min.css'); ?>
    
 
     <?= $this->fetch('css') ?>
@@ -52,7 +53,7 @@
 			</div>
 		</form>
 		<ul class="nav menu">
-            <li><a href="index.html"><span class="glyphicon glyphicon-dashboard"></span> Dashboard</a></li>
+            <li><a href="<?= $this->Url->build(['controller' => 'Pages', 'action' => 'home']) ?>"><span class="glyphicon glyphicon-dashboard"></span> Dashboard</a></li>
             <li><a href="buy.html"><span class="glyphicon glyphicon-shopping-cart"></span>Buy/Sell</a></li>
             <li><a href="positions.html"><span class="glyphicon glyphicon-check"></span> My Positions </a></li>
             <li><a href="advice.html"><span class="glyphicon glyphicon-info-sign"> </span> Trading Advice </a></li>
@@ -84,10 +85,11 @@
         
     <?= $this->Html->script('jquery-1.11.1.min.js'); ?>
     <?= $this->Html->script('bootstrap.min.js'); ?>
-    <?= $this->Html->script('chart-min.js'); ?>
+    <?= $this->Html->script('chart.min.js'); ?>
     <?= $this->Html->script('easypiechart.js'); ?>
     <?= $this->Html->script('easypiechart-data.js'); ?>
     <?= $this->Html->script('bootstrap-datepicker.js'); ?>
+    <?= $this->Html->script('//cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js'); ?>
     
     <?= $this->fetch('script') ?>
 	<!--
