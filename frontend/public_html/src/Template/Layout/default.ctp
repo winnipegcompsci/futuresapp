@@ -58,9 +58,9 @@
             <li><a href="positions.html"><span class="glyphicon glyphicon-check"></span> My Positions </a></li>
             <li><a href="advice.html"><span class="glyphicon glyphicon-info-sign"> </span> Trading Advice </a></li>
             <li><a href="notifications.html"><span class="glyphicon glyphicon-flag"> </span> Notifications </a></li>
-            <li><a href="logs.html"><span class="glyphicon glyphicon-record"></span> Logs </a></li>            
+            <li><a href="<?= $this->Url->build(['controller' => 'Pages', 'action' => 'logs']) ?>"><span class="glyphicon glyphicon-record"></span> Logs </a></li>            
             <li role="presentation" class="divider"></li>            
-            <li><a href="settings.html"><span class="glyphicon glyphicon-cog"></span> Settings </a></li>
+            <li><a href="<?= $this->Url->build(['controller' => 'Pages', 'action' => 'settings']) ?>"><span class="glyphicon glyphicon-cog"></span> Settings </a></li>
 		</ul>
 	</div><!--/.sidebar-->
 		
