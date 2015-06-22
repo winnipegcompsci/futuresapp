@@ -69,7 +69,7 @@ if(
 
 // START
 
-log.info('Gekko v' + util.getVersion(), 'started');
+log.info('Gekko [Bitstamp] v' + util.getVersion(), 'started');
 log.info('I\'m gonna make you rich, Bud Fox.', '\n\n');
 
 // Tell what config file we are using:

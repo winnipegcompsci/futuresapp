@@ -100,6 +100,20 @@ config.RSI = {
   }
 };
 
+config.LONGHEDGE = {
+    max_coins: 100,
+    max_price: 300,
+    insurance: 50,    
+};
+
+config.SHORTHEDGE = {
+    max_coins: 100,
+    max_price: 300,
+    insurance: 50,    
+}
+
+
+
 // custom settings:
 config.custom = {
   my_custom_setting: 10,
@@ -254,7 +268,10 @@ config.webserver = {
 
 // not working, leave as is
 config.backtest = {
-  enabled: false
+  enabled: false,
+  // candleFile: 'okcoin_candles.csv', // the candles file
+  // from: 0, // optional start timestamp 
+  // to: 0 // optional end timestamp
 }
 
 // set this to true if you understand that Gekko will 

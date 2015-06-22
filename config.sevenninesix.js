@@ -100,6 +100,18 @@ config.RSI = {
   }
 };
 
+config.LONGHEDGE = {
+    max_coins: 100,
+    max_price: 300,
+    insurance: 50,    
+};
+
+config.SHORTHEDGE = {
+    max_coins: 100,
+    max_price: 300,
+    insurance: 50,    
+}
+
 // custom settings:
 config.custom = {
   my_custom_setting: 10,

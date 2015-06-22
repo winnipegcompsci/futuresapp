@@ -22,7 +22,7 @@ config.debug = true; // for additional logging / debugging
 // Monitor the live market
 config.watch = {
   enabled: true,
-  exchange: 'bitstamp', // @link https://github.com/askmike/gekko#supported-exchanges 
+  exchange: 'okcoin', // @link https://github.com/askmike/gekko#supported-exchanges 
   key: 'a3df6a8b-2799-4988-9336-e4ce74b88408',
   secret: 'C890A97000A0A5102CF6462F4F7BDCC1',
   currency: 'USD',

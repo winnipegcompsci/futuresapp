@@ -194,7 +194,7 @@ Manager.prototype.createDatabase = function(mom) {
 // load a daily database and store it in this.days
 Manager.prototype.loadDatabase = function(mom) {
   if(mom.dayString in this.days && this.days[mom.dayString].mounted)
-    return log.debug('Skipping loading', mom.dayString, ', it already exists');
+    return log.debug('Skipping creating db ', mom.dayString, ', it already exists');
 
   var filename = this.databaseName(mom);
 

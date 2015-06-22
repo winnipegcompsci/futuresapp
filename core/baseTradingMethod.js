@@ -21,7 +21,15 @@ var Indicators = {
   RSI: {
     factory: require(indicatorsPath + 'RSI'),
     input: 'candle'
-  }
+  },
+  LONGHEDGE: {
+    factory: require(indicatorsPath + 'LONGHEDGE'),
+    input: 'candle'
+  },
+  SHORTHEDGE: {
+    factory: require(indicatorsPath + 'SHORTHEDGE'),
+    input: 'candle'
+  },
 };
 
 var allowedIndicators = _.keys(Indicators);
