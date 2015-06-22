@@ -69,8 +69,7 @@ if(
 
 // START
 
-log.info('Gekko v' + util.getVersion(), 'started');
-log.info('I\'m gonna make you rich, Bud Fox.', '\n\n');
+log.info('Gekko [796] v' + util.getVersion(), 'started');
 
 // Tell what config file we are using:
 log.info('Using config file: ' + config.resolvedLocation);
