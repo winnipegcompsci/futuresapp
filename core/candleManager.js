@@ -59,6 +59,8 @@ var fs = require('fs');
 var nedb = require('nedb');
 var async = require('async');
 
+var mongodb = require('mongodb');
+
 var util = require('./util');
 var config = util.getConfig();
 // var backtest = config.backtest;

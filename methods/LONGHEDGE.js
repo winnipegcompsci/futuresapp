@@ -11,13 +11,12 @@
     W = Average Cost of OKCoin Position
     O = OKCoin LTP
     I = Insurance Coverage Rate %
-
 */
 
 /*
     LOGIC:
     IF (Q) < (A) && (C) < (S):
-        Buy (B) out of the Bending Order (A) to a max of (A).
+        Buy (B) out of the Pending Order (A) to a max of (A).
         
     IF (O) > (W * (1.25/100)):
         Sells (R*I) BTC 
@@ -30,7 +29,7 @@
     IF (O) has dropped before insurance has been sold:
         Once it is 1.25% below W it buys additional insurance at (Q) * (I).
         Add Z% of Q to Q for every 1$ that it's dropped.
-        (where Z is 10,20,30,35,40,45,50,55,60,56,70,75,80,85,90,95 to the position
+        (where Z is 10,20,30,35,40,45,50,55,60,56,70,75,80,85,90,95% to the position
         for each $ it's dropped).
 */
 
@@ -71,7 +70,7 @@ method.log = function() {
   log.debug('\t', 'long ema:', longhedge.long.result.toFixed(8));
   log.debug('\t', 'short ema:', longhedge.short.result.toFixed(8));
   log.debug('\t diff:', longhedge.result.toFixed(5));
-  log.debug('\t DEMA age:', longhedge.short.age, 'candles');
+  log.debug('\t LONGHEDGE age:', longhedge.short.age, 'candles');
 }
 
 method.check = function() {
@@ -82,7 +81,7 @@ method.check = function() {
 
   var message = '@ ' + price.toFixed(8) + ' (' + diff.toFixed(5) + ')';
 
-  /*
+    /*
   if(diff > settings.thresholds.up) {
     log.debug('we are currently in uptrend', message);
 

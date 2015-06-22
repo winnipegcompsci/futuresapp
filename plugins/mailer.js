@@ -48,7 +48,7 @@ Mailer.prototype.setup = function(done) {
           config.watch.currency,
           '/',
           config.watch.asset,
-          ". I'll let you know when I got some advice"
+          ". I'll let you know when I get some advice"
         ].join(''),
         _.bind(function(err) {
           this.checkResults(err);
