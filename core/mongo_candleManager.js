@@ -56,7 +56,7 @@ var moment = require('moment');
 var utc = moment.utc;
 var log = require('./log.js');
 var fs = require('fs');
-var nedb = require('nedb');
+var mongodb = require('mongodb');
 var async = require('async');
 
 var util = require('./util');
@@ -170,7 +170,7 @@ Manager.prototype.createDatabase = function(mom) {
   log.debug('Creating a new daily database for day', mom.dayString);
 
   var day = {
-    handle: new nedb({filename: filename, autoload: true}),
+    handle: new mongodb({filename: filename, autoload: true}),
     time: mom.day,
     filename: filename,
     string: mom.dayString,
@@ -226,7 +226,7 @@ Manager.prototype.loadDatabase = function(mom) {
   //
   // https://github.com/louischatriot/nedb/issues/117
   try {
-    day.handle = new nedb({filename: filename, autoload: true});
+    day.handle = new mongodb({filename: filename, autoload: true});
   } catch(e) {
     util.die('Database file ' + filename + ' is corrupt, delete or rename that file and try again.');
   }

@@ -98,8 +98,8 @@ Fetcher.prototype.calculateNextFetch = function(trades) {
 
   // for now just refetch every minute
   
-  // return this.fetchAfter = util.minToMs(0.8);
-  return this.fetchAfter = util.minToMs(Math.random() * (0.3 - 0.1) + 0.1)  // Return Random Time between 10-20 seconds.
+  return this.fetchAfter = util.minToMs(0.8);
+  // return this.fetchAfter = util.minToMs(Math.random() * (0.3 - 0.1) + 0.1)  // Return Random Time between 10-20 seconds.
 
 
   // not used at this moment

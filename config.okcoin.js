@@ -27,6 +27,7 @@ config.watch = {
   secret: 'C890A97000A0A5102CF6462F4F7BDCC1',
   currency: 'USD',
   asset: 'BTC'
+  // password: hTCzEdZc
 }
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -35,7 +36,7 @@ config.watch = {
 
 config.tradingAdvisor = {
   enabled: true,
-  method: 'LONGHEDGE',
+  method: 'DEMA',
   candleSize: 60,
   historySize: 50
 }
@@ -102,15 +103,15 @@ config.RSI = {
 
 // Custom Longhedge and Shorthedge Strategies Implemented for Joe.
 config.LONGHEDGE = {
-    max_coins: 100,     // Max Coins to Hedge
+    max_hedge_amount: 100,     // Max Coins to Hedge
     max_price: 300,     // Max Price to Pay Per BTC
-    insurance: 50,      // Insurance Rate (As a %)
+    insurance: 0.70,      // Insurance Rate (As a %)
 };
 
 config.SHORTHEDGE = {
-    max_coins: 100,
-    max_price: 300,
-    insurance: 50,    
+    max_hedge_amount: 100,     // Max Coins to Hedge
+    max_price: 300,     // Max Price to Pay Per BTC
+    insurance: 0.70,      // Insurance Rate (As a %)  
 }
 
 

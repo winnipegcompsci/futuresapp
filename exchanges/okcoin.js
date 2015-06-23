@@ -131,5 +131,9 @@ Trader.prototype.getTrades = function(since, callback, descending) {
   this.okcoin.getTrades(_.bind(process, this));
 }
 
+Trader.prototype.getSpread = function() {
+    this.okcoin.getSpread(_.bind(process, this));
+}
+
 
 module.exports = Trader;

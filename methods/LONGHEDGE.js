@@ -35,12 +35,15 @@
 
 
 // helpers
+var OKCoin = require("okcoin");
 var _ = require('lodash');
 var log = require('../core/log.js');
 
 // configuration
 var config = require('../core/util.js').getConfig();
 var settings = config.LONGHEDGE;
+
+OKCOIN = new OKCoin(config.watch.key, config.watch.secret)
 
 // let's create our own method
 var method = {};
@@ -56,23 +59,26 @@ method.init = function() {
   this.addIndicator('longhedge', 'LONGHEDGE', settings);
   
   // Variables
-  max_hedge_amount = 100;       // Total BTC To Spend
+  max_hedge_amount = settings.max_hedge_amount;       // Total BTC To Spend
+  max_buy_price = settings.max_price;            // Do NOT Buy If Over This Price.
+  insurance_coverage_rate = settings.insurance ; // Insurance Coverage Rate (as %)
+  
   average_buy_amount = 10;        // Average BTC To Spend
   current_holding_amount = 0;      // Total Amount Currently Held (Position)
 
-  max_buy_price = 300;            // Do NOT Buy If Over This Price.
-
+  
   current_amount_insured = 0;     // Amount of Insurance Currently Holding
-  average_spread = 0;
-  current_spread = 0;             // Current Spread Over 3 Hours + 10%
+  average_spread = 0;               // Average Spread Over 3 Hours
+  current_spread = OKCOIN.getCurrentSpread();             // Current Spread 
   average_position_cost = 0;      // Average Position Cost
   last_traded_price = 0;          // Last Traded Price
-  insurance_coverage_rate = 0.70; // Insurance Coverage Rate (as %)
+  
 }
 
 // what happens on every new candle?
 method.update = function(candle) {
   // nothing!
+  
 }
 
 // for debugging purposes: log the last calculated
@@ -90,34 +96,36 @@ method.log = function() {
 method.check = function() {
     // Long Biased Hedge Strategy.
     
-    if(last_traded_price < max_buy_price && current_holding_amount < max_hedge_amount && current_spread < average_spread) {
-        OKCOIN.placeBuyOrder(average_buy_amount, max_hedge_amount - current_holding_amount);
-    }
-    
-    if(last_traded_price >= average_position_cost*1.0125) {
+    if(last_traded_price < max_buy_price) {
+        if(current_holding_amount < max_hedge_amount && current_spread < average_spread) {
+            OKCOIN.placeBuyOrder(average_buy_amount, max_hedge_amount - current_holding_amount);
+        }
+        
+        if(last_traded_price >= average_position_cost*1.0125) {
+            if(!soldInsurance) {
+                // Sell current_amount_insured * insurance_coverage_rate
+                OKCOIN.sellInsurance(current_amount_insured * insurance_coverage_rate);
+                soldInsurance = false;
+            } 
+            else if(soldInsurance && last_traded_price >= average_position_cost*1.025) {
+                OKCOIN.placeSellOrder(current_holding_amount / 2)
+            } 
+            else if(soldInsurance && last_traded_price >= average_position_cost*1.04) {
+                OKCOIN.buyInsurance(current_holding_amount * insurance_coverage_rate / 2)
+            }
+        }
+        
+        if(soldInsurance) {
+            if(last_traded_price <= average_position_cost / (1 + 0.0125 - 0.005)) {
+                OKCOIN.closePosition();
+            }
+        }
+        
         if(!soldInsurance) {
-            // Sell current_amount_insured * insurance_coverage_rate
-            OKCOIN.sellInsurance(current_amount_insured * insurance_coverage_rate);
-            soldInsurance = false;
-        } 
-        else if(soldInsurance && last_traded_price >= average_position_cost*1.025) {
-            OKCOIN.placeSellOrder(current_holding_amount / 2)
-        } 
-        else if(soldInsurance && last_traded_price >= average_position_cost*1.04) {
-            OKCOIN.buyInsurance(current_holding_amount * insurance_coverage_rate / 2)
-        }
-    }
-    
-    if(soldInsurance) {
-        if(last_traded_price <= average_position_cost / (1 + 0.0125 - 0.005)) {
-            OKCOIN.closePosition();
-        }
-    }
-    
-    if(!soldInsurance) {
-        if(last_traded_price <= average_position_cost/1.0125) {
-            OKCOIN.buyInsurance(current_holding_amount * insurance_coverage_rate);
-            currentHoldingAmount += (current_holding_amount * (average_position_cost - last_traded_price))
+            if(last_traded_price <= average_position_cost / 1.0125) {
+                OKCOIN.buyInsurance(current_holding_amount * insurance_coverage_rate);
+                currentHoldingAmount += (current_holding_amount * (average_position_cost - last_traded_price))
+            }
         }
     }
 }
