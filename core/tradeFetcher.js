@@ -97,52 +97,54 @@ Fetcher.prototype.setFetchMeta = function(trades) {
 Fetcher.prototype.calculateNextFetch = function(trades) {
 
   // for now just refetch every minute
-  return this.fetchAfter = util.minToMs(0.8);
+  
+  // return this.fetchAfter = util.minToMs(0.8);
+  return this.fetchAfter = util.minToMs(Math.random() * (0.3 - 0.1) + 0.1)  // Return Random Time between 10-20 seconds.
 
 
   // not used at this moment
 
   // if the timespan per fetch is fixed at this exchange,
   // just return that number.
-  if(this.exchange.fetchTimespan) {
-    // todo: if the interval doesn't go in
-    // sync with exchange fetchTimes we
-    // need to calculate overlapping times.
-    // 
-    // eg: if we can fetch every 60 min but user
-    // interval is at 80, we would also need to
-    // fetch again at 80 min.
-    var min = _.min([
-      this.exchange.fetchTimespan,
-      config.tradingAdvisor.candleSize
-    ]);
-    this.fetchAfter = util.minToMs(min);
-    // debugging bitstamp
-    this.fetchAfter = util.minToMs(1);
-    return;  
-  }
+  // if(this.exchange.fetchTimespan) {
+    // // todo: if the interval doesn't go in
+    // // sync with exchange fetchTimes we
+    // // need to calculate overlapping times.
+    // // 
+    // // eg: if we can fetch every 60 min but user
+    // // interval is at 80, we would also need to
+    // // fetch again at 80 min.
+    // var min = _.min([
+      // this.exchange.fetchTimespan,
+      // config.tradingAdvisor.candleSize
+    // ]);
+    // this.fetchAfter = util.minToMs(min);
+    // // debugging bitstamp
+    // this.fetchAfter = util.minToMs(1);
+    // return;  
+  // }
     
-  var minimalInterval = util.minToMs(config.tradingAdvisor.candleSize);
+  // var minimalInterval = util.minToMs(config.tradingAdvisor.candleSize);
 
-  // if we got the last 100 seconds of trades last
-  // time make sure we fetch at least in 55 seconds
-  // again.
-  var safeTreshold = 0.2;
-  var defaultFetchTime = util.minToMs(1);
+  // // if we got the last 100 seconds of trades last
+  // // time make sure we fetch at least in 55 seconds
+  // // again.
+  // var safeTreshold = 0.2;
+  // var defaultFetchTime = util.minToMs(1);
 
-  if(this.fetchTimespan * safeTreshold > minimalInterval)
-    // If the oldest trade in a fetch call > candle size
-    // we can just use candle size.
-    var fetchAfter = minimalInterval;
-  else if(this.fetchTimespan * safeTreshold < defaultFetchTime)
-    // If the oldest trade in a fetch call < default time
-    // we fetch at default time.
-    var fetchAfter = defaultFetchTime;
-  else
-    // use a safe fetch time to determine
-    var fetchAfter = this.fetchTimespan * safeTreshold;
+  // if(this.fetchTimespan * safeTreshold > minimalInterval)
+    // // If the oldest trade in a fetch call > candle size
+    // // we can just use candle size.
+    // var fetchAfter = minimalInterval;
+  // else if(this.fetchTimespan * safeTreshold < defaultFetchTime)
+    // // If the oldest trade in a fetch call < default time
+    // // we fetch at default time.
+    // var fetchAfter = defaultFetchTime;
+  // else
+    // // use a safe fetch time to determine
+    // var fetchAfter = this.fetchTimespan * safeTreshold;
 
-  this.fetchAfter = fetchAfter;
+  // this.fetchAfter = fetchAfter;
 }
 
 Fetcher.prototype.scheduleNextFetch = function() {

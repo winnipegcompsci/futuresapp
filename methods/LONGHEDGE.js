@@ -40,7 +40,7 @@ var log = require('../core/log.js');
 
 // configuration
 var config = require('../core/util.js').getConfig();
-var settings = config.DEMA;
+var settings = config.LONGHEDGE;
 
 // let's create our own method
 var method = {};
@@ -50,10 +50,24 @@ method.init = function() {
   this.currentTrend;
   this.requiredHistory = config.tradingAdvisor.historySize;
 
-  this.name = 'LONGHEDGE';
+  this.name = 'Long Biased Hedge Strategy';
 
   // define the indicators we need
   this.addIndicator('longhedge', 'LONGHEDGE', settings);
+  
+  // Variables
+  max_hedge_amount = 100;       // Total BTC To Spend
+  average_buy_amount = 10;        // Average BTC To Spend
+  current_holding_amount = 0;      // Total Amount Currently Held (Position)
+
+  max_buy_price = 300;            // Do NOT Buy If Over This Price.
+
+  current_amount_insured = 0;     // Amount of Insurance Currently Holding
+  average_spread = 0;
+  current_spread = 0;             // Current Spread Over 3 Hours + 10%
+  average_position_cost = 0;      // Average Position Cost
+  last_traded_price = 0;          // Last Traded Price
+  insurance_coverage_rate = 0.70; // Insurance Coverage Rate (as %)
 }
 
 // what happens on every new candle?
@@ -74,37 +88,38 @@ method.log = function() {
 }
 
 method.check = function() {
-
-  var longhedge = this.indicators.longhedge;
-  var diff = dema.result;
-  var price = this.lastPrice;
-
-  var message = '@ ' + price.toFixed(8) + ' (' + diff.toFixed(5) + ')';
-
-    /*
-  if(diff > settings.thresholds.up) {
-    log.debug('we are currently in uptrend', message);
-
-    if(this.currentTrend !== 'up') {
-      this.currentTrend = 'up';
-      this.advice('long');
-    } else
-      this.advice();
-
-  } else if(diff < settings.thresholds.down) {
-    log.debug('we are currently in a downtrend', message);
-
-    if(this.currentTrend !== 'down') {
-      this.currentTrend = 'down';
-      this.advice('short');
-    } else
-      this.advice();
-
-  } else {
-    log.debug('we are currently not in an up or down trend', message);
-    this.advice();
-  }
-  */
+    // Long Biased Hedge Strategy.
+    
+    if(last_traded_price < max_buy_price && current_holding_amount < max_hedge_amount && current_spread < average_spread) {
+        OKCOIN.placeBuyOrder(average_buy_amount, max_hedge_amount - current_holding_amount);
+    }
+    
+    if(last_traded_price >= average_position_cost*1.0125) {
+        if(!soldInsurance) {
+            // Sell current_amount_insured * insurance_coverage_rate
+            OKCOIN.sellInsurance(current_amount_insured * insurance_coverage_rate);
+            soldInsurance = false;
+        } 
+        else if(soldInsurance && last_traded_price >= average_position_cost*1.025) {
+            OKCOIN.placeSellOrder(current_holding_amount / 2)
+        } 
+        else if(soldInsurance && last_traded_price >= average_position_cost*1.04) {
+            OKCOIN.buyInsurance(current_holding_amount * insurance_coverage_rate / 2)
+        }
+    }
+    
+    if(soldInsurance) {
+        if(last_traded_price <= average_position_cost / (1 + 0.0125 - 0.005)) {
+            OKCOIN.closePosition();
+        }
+    }
+    
+    if(!soldInsurance) {
+        if(last_traded_price <= average_position_cost/1.0125) {
+            OKCOIN.buyInsurance(current_holding_amount * insurance_coverage_rate);
+            currentHoldingAmount += (current_holding_amount * (average_position_cost - last_traded_price))
+        }
+    }
 }
 
 module.exports = method;

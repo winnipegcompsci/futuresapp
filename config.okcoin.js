@@ -35,7 +35,7 @@ config.watch = {
 
 config.tradingAdvisor = {
   enabled: true,
-  method: 'DEMA',
+  method: 'LONGHEDGE',
   candleSize: 60,
   historySize: 50
 }
@@ -100,10 +100,11 @@ config.RSI = {
   }
 };
 
+// Custom Longhedge and Shorthedge Strategies Implemented for Joe.
 config.LONGHEDGE = {
-    max_coins: 100,
-    max_price: 300,
-    insurance: 50,    
+    max_coins: 100,     // Max Coins to Hedge
+    max_price: 300,     // Max Price to Pay Per BTC
+    insurance: 50,      // Insurance Rate (As a %)
 };
 
 config.SHORTHEDGE = {

@@ -59,7 +59,7 @@ var fs = require('fs');
 var nedb = require('nedb');
 var async = require('async');
 
-var mongodb = require('mongodb');
+var mongodb = require('mongodb');       // Switching from NeDB to MongoDB.
 
 var util = require('./util');
 var config = util.getConfig();
@@ -436,7 +436,7 @@ Manager.prototype.checkHistoryAge = function(data) {
     return;
 
   // there is a gap, mark current day as corrupted and process
-  log.warn('The history we found is to old, we have to build a new one');
+  log.warn('The history we found is too old, we have to build a new one');
 
   this.deleteDay(this.days[this.current.dayString], true);
 
