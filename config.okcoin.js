@@ -36,7 +36,7 @@ config.watch = {
 
 config.tradingAdvisor = {
   enabled: true,
-  method: 'DEMA',
+  method: 'LONGHEDGE',
   candleSize: 60,
   historySize: 50
 }

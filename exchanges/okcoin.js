@@ -126,9 +126,10 @@ Trader.prototype.getTrades = function(since, callback, descending) {
     
     callback(null, result);
   };
-
-  // this.okcoin.transactions(_.bind(process, this));
-  this.okcoin.getTrades(_.bind(process, this));
+ 
+  this.okcoin.getTrades(_.bind(process, this));  // OLD future_trades.do DATA
+  
+  // this.okcoin.getTradesHistory(_.bind(process, this));
 }
 
 Trader.prototype.getSpread = function() {

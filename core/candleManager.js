@@ -570,9 +570,11 @@ Manager.prototype.getCandles = function(mom, from, to, cb) {
 Manager.prototype.processTrades = function(data) {
   this.setFetchMeta(data);
 
+  /*
   if(this.fetch.start.day > this.current.day)
     util.die('FATAL: Fetch data appears from the future, don\'t know how to process');
-
+  */
+    
   // if first run
   if(!this.minumum) {
     // first calculate some stuff
@@ -586,7 +588,7 @@ Manager.prototype.processTrades = function(data) {
   var trades = this.filterTrades(data.all);
   
   if(!_.size(trades)) {
-    log.debug('done with this batch (1)');
+    log.debug('Already Processed All Trades in This Batch');
     return this.emit('processed');
   }
 
@@ -686,8 +688,8 @@ Manager.prototype.calculateCandles = function(trades) {
 
   _.each(trades, function(trade) {
 
-    // var util = require('util');
-    // console.log("Trade:: " + util.inspect(trade)); // DEBUG
+    var util = require('util');
+    // console.log("candleManager.js::calculateCandles()-Trade== " + util.inspect(trade)); // DEBUG
     
     var mom = moment.unix(trade.date).utc();
     var min = this.momentToMinute(mom);

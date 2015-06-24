@@ -78,6 +78,7 @@ Fetcher.prototype.start = function() {
 // Set the first & last trade date and set the
 // timespan between them.
 Fetcher.prototype.setFetchMeta = function(trades) {
+
   this.firstTrade = _.first(trades); 
   this.first = moment.unix(this.firstTrade.date).utc();
   this.lastTrade = _.last(trades);
@@ -200,6 +201,5 @@ Fetcher.prototype.processTrades = function(err, trades) {
     nextIn: this.fetchAfter
   });
 }
-
 
 module.exports = Fetcher;

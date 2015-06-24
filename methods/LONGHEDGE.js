@@ -65,11 +65,12 @@ method.init = function() {
   
   average_buy_amount = 10;        // Average BTC To Spend
   current_holding_amount = 0;      // Total Amount Currently Held (Position)
-
   
   current_amount_insured = 0;     // Amount of Insurance Currently Holding
+  
   average_spread = 0;               // Average Spread Over 3 Hours
-  current_spread = OKCOIN.getCurrentSpread();             // Current Spread 
+  // current_spread = OKCOIN.getCurrentSpread();             // Current Spread 
+  
   average_position_cost = 0;      // Average Position Cost
   last_traded_price = 0;          // Last Traded Price
   
@@ -77,8 +78,9 @@ method.init = function() {
 
 // what happens on every new candle?
 method.update = function(candle) {
-  // nothing!
-  
+    var util = require('util');
+    
+    console.log("Long Hedge method.update() Called: " + util.inspect(candle));
 }
 
 // for debugging purposes: log the last calculated
@@ -95,7 +97,7 @@ method.log = function() {
 
 method.check = function() {
     // Long Biased Hedge Strategy.
-    
+    /*
     if(last_traded_price < max_buy_price) {
         if(current_holding_amount < max_hedge_amount && current_spread < average_spread) {
             OKCOIN.placeBuyOrder(average_buy_amount, max_hedge_amount - current_holding_amount);
@@ -128,6 +130,7 @@ method.check = function() {
             }
         }
     }
+    */
 }
 
 module.exports = method;
